@@ -1,0 +1,28 @@
+{
+  "name": "@0ti.me/postgres-db-versioning",
+  "version": "0.1.0",
+  "description": "A library for managing PostgresDB migrations and initialization",
+  "license": "GPL-3.0",
+  "main": "src/index.js",
+  "repository": "https://www.github.com/0time/postgres-db-versioning",
+  "scripts": {
+    "lint": "eslint .",
+    "run-coveralls": "NODE_ENV=unit nyc report --reporter=text-lcov | coveralls",
+    "test": "yarn lint && yarn test:unit && yarn test:coveralls && yarn test:integration",
+    "test:coveralls": "if-env-run CI yarn run-coveralls",
+    "test:integration": "export NODE_ENV=integration && nyc mocha && nyc check-coverage",
+    "test:unit": "NODE_ENV=unit nyc mocha"
+  },
+  "dependencies": {
+    "@0ti.me/tiny-pfp": "^0.1.12",
+    "config": "^3.3.1",
+    "pg": "^8.3.2",
+    "pg-format": "^1.0.4"
+  },
+  "devDependencies": {
+    "@0ti.me/test-deps": "^0.1.19"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

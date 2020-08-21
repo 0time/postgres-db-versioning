@@ -1,0 +1,22 @@
+module.exports = {
+  JSON_SELECTORS: {
+    CONFIG_CONNECTION: 'config.connectionConfig',
+    CONFIG_LOGGER: 'config.logger',
+    CONFIG_POOL: 'config.pool',
+    CONFIG_VERSION: 'config.version',
+    DATABASE_DESCRIPTION: 'db.description',
+    DATABASE_VERSION: 'db.description.version',
+    DRY_RUN: 'config.dryRun',
+    ERROR_FN_LOGGER_CONFIG: 'config.loggerFunctionMap.error',
+    INFO_FN_LOGGER_CONFIG: 'config.loggerFunctionMap.info',
+    IS_QUERY: 'isQuery',
+    MIGRATIONS: 'config.migrations',
+    LOGGER: 'logger',
+    PLAN: 'plan',
+    POOL: 'pool',
+    TRANSACTION: 'transaction',
+    REQUESTED_VERSION: 'config.requestedVersion',
+    SCRATCHED_VERSION: 'scratchedVersion',
+    VERSIONS_TABLE_NAME: 'config.tableNameForVersions',
+  },
+};
