@@ -1,5 +1,7 @@
 module.exports = {
   JSON_SELECTORS: {
+    BEGIN: 'BEGIN',
+    COMMIT: 'COMMIT',
     CONFIG_CONNECTION: 'config.connectionConfig',
     CONFIG_LOGGER: 'config.logger',
     CONFIG_POOL: 'config.pool',
@@ -15,6 +17,7 @@ module.exports = {
     PLAN: 'plan',
     POOL: 'pool',
     REQUESTED_VERSION: 'config.requestedVersion',
+    ROLLBACK: 'ROLLBACK',
     SCRATCH: 'config.scratch',
     SCRATCHED_VERSION: 'scratchedVersion',
     TRANSACTION: 'transaction',

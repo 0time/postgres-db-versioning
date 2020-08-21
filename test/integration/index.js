@@ -5,12 +5,15 @@ const initializeMockLogger = require('../lib/initialize-mock-logger');
 const insertVersionsTable = require('../../src/lib/queries/insert-versions-table');
 const {
   JSON_SELECTORS: {
+    BEGIN,
+    COMMIT,
     CONFIG_LOGGER,
     CONFIG_POOL,
     DRY_RUN,
     ERROR_FN_LOGGER_CONFIG,
     INFO_FN_LOGGER_CONFIG,
     MIGRATIONS,
+    ROLLBACK,
     VERSIONS_TABLE_NAME,
   },
 } = require('../../src/lib/constants');
@@ -20,10 +23,6 @@ const testConfig = require('config');
 const { _, d, expect, tquire, uuid } = deps;
 
 const me = __filename;
-
-const BEGIN = 'BEGIN';
-const COMMIT = 'COMMIT';
-const ROLLBACK = 'ROLLBACK';
 
 d(me, () => {
   let A = null;

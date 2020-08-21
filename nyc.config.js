@@ -5,5 +5,5 @@ module.exports = Object.assign(
   {},
   nycConfig,
   // TODO: Fix this so we are testing coverage
-  nycConfig.getCoverageLevels(NODE_ENV === 'unit' ? 27 : 68),
+  nycConfig.getCoverageLevels(NODE_ENV === 'unit' ? 29 : 71),
 );
