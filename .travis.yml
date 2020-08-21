@@ -1,0 +1,25 @@
+language: node_js
+node_js:
+- 10
+- 11
+- 12
+- 13
+- 14
+jobs:
+  include:
+  - if: type = pull_request
+    node_js: 12
+    stage: expect_version_bump
+    script: yarn check-for-version-bump
+  - node_js: 12
+    if: branch = master
+    stage: deploy
+    deploy:
+      api_key:
+        secure: dvEGr7UR/9ar+bb7twqeh414FcMXp5JmV8b0Jn5WDELqjL6L1aaIhZrCNDHhf+wBObmfRLM5ANUetMUQIkvQLP/R93DSixkwgUpwKidOZbT+RWem2INRS+0d0cj2AcsY1zOs2u+5+t8wFn7aq3i5Z/1CySuZgL2X+gG/qXcD0Uo8EvlToxwneKkWMEiEwVjJozGgJxLkP1XmjmrwLZbde16oLpZZVlJRvkd2rpatpjOy+mFYi0yOHu9/lfpMWaIljupziBZ9ByRb19GTkpezEbWYQ/K0PeiAxNAeU/UfgG4mrN0g+eZIq+kw0vj7pimcrYOKZdAmaWgyRGdLorSWDlmXBDlu7lpVPWm4ScL+Bw6qp0sqXoJmKh9+oEwNUSa8rR2pNX9oykV3kk8e6is1rVkNCwgabkprxqt7qF2nFbLBO6uA+SPy6Z/0W63HtqgdGcBrRle364/JpiftJ6XVAYz9Js8C3biUQVBjOGvNyFQYSlcMpExVfNbDvKzFzt47WMPFa8xg4Uv+OIwrHx5IwMg88HfRL6NG/wlrXHin0qQvoBimJwH6cfUhhvC+E7btpDOI8PfobkOY4zWV+loSNB1Yxbk+wsvtaeMMl5bP9+F8vB+bJMFrd1rjBIpX9ZMo6ZbBBY4hgA8nxI5w+sxr6CIBBVhLwPnwosx/2bSnFSM=
+      email: npm@0ti.me
+      provider: npm
+      skip_cleanup: true
+      on:
+        branch: master
+        repo: 0time/postgres-db-versioning
