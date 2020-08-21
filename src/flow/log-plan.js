@@ -8,7 +8,11 @@ module.exports = context => {
     get(context, PLAN).forEach(each => {
       if (get(each, IS_QUERY, true) === true) {
         // non queries should be ignored during the plan, they just set(context, TRANSACTION, true|false);
-        get(context, LOGGER).info(each);
+        if (Array.isArray(each)) {
+          get(context, LOGGER).info(...each);
+        } else {
+          get(context, LOGGER).info(each);
+        }
       }
     });
   }

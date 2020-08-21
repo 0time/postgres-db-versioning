@@ -15,7 +15,10 @@ module.exports = context =>
     version: getVersion(context).catch(err => {
       if (
         err.message ===
-        `relation "${get(context, VERSIONS_TABLE_NAME)}" does not exist`
+        `relation "${get(
+          context,
+          VERSIONS_TABLE_NAME,
+        ).toLowerCase()}" does not exist`
       ) {
         return null;
       } else {

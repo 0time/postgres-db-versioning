@@ -14,9 +14,10 @@ module.exports = {
     LOGGER: 'logger',
     PLAN: 'plan',
     POOL: 'pool',
-    TRANSACTION: 'transaction',
     REQUESTED_VERSION: 'config.requestedVersion',
+    SCRATCH: 'config.scratch',
     SCRATCHED_VERSION: 'scratchedVersion',
+    TRANSACTION: 'transaction',
     VERSIONS_TABLE_NAME: 'config.tableNameForVersions',
   },
 };

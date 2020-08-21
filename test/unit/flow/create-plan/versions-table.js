@@ -19,7 +19,7 @@ d(me, () => {
 
     context = {};
 
-    set(context, PLAN, []);
+    set(context, PLAN, ['non-empty-plan']);
     set(context, VERSIONS_TABLE_NAME, versionsTableName);
   });
 
@@ -31,7 +31,7 @@ d(me, () => {
     it('should start with creating the versions table', () => {
       createPlan(context);
 
-      expect(get(context, PLAN).pop()).to.match(
+      expect(get(context, PLAN).shift()).to.match(
         new RegExp(`CREATE TABLE ${versionsTableName}`),
       );
     });

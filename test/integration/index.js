@@ -1,5 +1,6 @@
 const createVersionsTable = require('../../src/lib/queries/create-versions-table');
 const generateMockQuery = require('../lib/generate-mock-query');
+const getVersion = require('../../src/lib/queries/get-version');
 const initializeMockLogger = require('../lib/initialize-mock-logger');
 const insertVersionsTable = require('../../src/lib/queries/insert-versions-table');
 const {
@@ -48,10 +49,7 @@ d(me, () => {
   const fromArray = array =>
     array.reduce(
       (acc, ea) =>
-        acc.concat([
-          [ea.sql],
-          [[insertStatement, [ea.version, ea.description]]],
-        ]),
+        acc.concat([[ea.sql], [insertStatement, [ea.version, ea.description]]]),
       [],
     );
 
@@ -73,7 +71,7 @@ d(me, () => {
 
     insertStatement = insertVersionsTable(context)({}).shift();
 
-    return tquire(me)(context);
+    return tquire(me)(context.config);
   };
 
   beforeEach(() => {
@@ -85,10 +83,10 @@ d(me, () => {
     mockQuery = generateMockQuery(context);
 
     versionsTableName = `versions-table-name-${uuid()}`.replace(/-/g, '_');
-    getVersionQuery = `SELECT MAX(version) FROM ${versionsTableName};`;
-
     set(context, VERSIONS_TABLE_NAME, versionsTableName);
+
     createVersionsTableStatement = createVersionsTable(context);
+    getVersionQuery = getVersion(context);
   });
 
   describe('given an uninitialized DB', () => {

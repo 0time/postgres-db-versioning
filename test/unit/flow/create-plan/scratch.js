@@ -1,7 +1,14 @@
-const { set } = require('@0ti.me/tiny-pfp');
+const insertVersionsTable = require('../../../../src/lib/queries/insert-versions-table');
 const {
-  JSON_SELECTORS: { DATABASE_VERSION, PLAN, SCRATCH },
+  JSON_SELECTORS: {
+    DATABASE_VERSION,
+    PLAN,
+    SCRATCH,
+    CONFIG_VERSION,
+    VERSIONS_TABLE_NAME,
+  },
 } = require('../../../../src/lib/constants');
+const { set } = require('@0ti.me/tiny-pfp');
 
 const { d, expect, tquire, uuid } = deps;
 
@@ -9,11 +16,23 @@ const me = __filename;
 
 d(me, () => {
   const scratch = (...args) => tquire(me)(...args);
+
+  let configVersion = null;
   let context = null;
+  let insertStatement = null;
+  let versionsTableName = null;
 
   beforeEach(() => {
     context = {};
+
+    configVersion = `config-version-${uuid()}`;
+    versionsTableName = `versions-table-name-${uuid()}`.replace(/-/g, '_');
+
     set(context, PLAN, []);
+    set(context, CONFIG_VERSION, configVersion);
+    set(context, VERSIONS_TABLE_NAME, versionsTableName);
+
+    insertStatement = insertVersionsTable(context)({}).shift();
   });
 
   describe('given a null database version', () => {
@@ -35,7 +54,11 @@ d(me, () => {
       it('should add them to the plan', () =>
         expect(scratch(context))
           .to.have.nested.property(PLAN)
-          .and.that.deep.equals([aScratchStep, bScratchStep]));
+          .and.that.deep.equals([
+            aScratchStep,
+            bScratchStep,
+            [insertStatement, [configVersion, 'scratch version']],
+          ]));
     });
 
     describe('and an undefined scratch', () =>

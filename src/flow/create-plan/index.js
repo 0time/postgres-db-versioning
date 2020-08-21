@@ -12,9 +12,9 @@ const versionsTable = require('./versions-table');
 
 module.exports = flow([
   set(PLAN, []),
-  createTransaction,
-  versionsTable,
   scratch,
   migrations,
+  versionsTable,
+  createTransaction,
   commit,
 ]);

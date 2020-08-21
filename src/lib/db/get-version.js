@@ -1,13 +1,10 @@
 const { fp, get } = require('@0ti.me/tiny-pfp');
-
+const getVersion = require('../queries/get-version');
 const {
-  JSON_SELECTORS: { POOL, VERSIONS_TABLE_NAME },
+  JSON_SELECTORS: { POOL },
 } = require('../constants');
 
 module.exports = context =>
   get(context, POOL)
-    .query(
-      // TODO: SQL Injection protection
-      `SELECT MAX(version) FROM ${get(context, VERSIONS_TABLE_NAME)};`,
-    )
+    .query(getVersion(context))
     .then(fp.get('rows.0.version'));

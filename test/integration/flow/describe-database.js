@@ -1,4 +1,5 @@
 const generateMockQuery = require('../../lib/generate-mock-query');
+const getVersion = require('../../../src/lib/queries/get-version');
 const {
   JSON_SELECTORS: { DATABASE_DESCRIPTION, POOL, VERSIONS_TABLE_NAME },
 } = require('../../../src/lib/constants');
@@ -12,36 +13,34 @@ const me = __filename;
 d(me, () => {
   let config = null;
   let context = null;
-  let describeDatabase = null;
   let mockQuery = null;
   let versionsTableName = null;
 
+  const describeDatabase = (...args) => {
+    set(context, POOL, mockQuery);
+
+    return tquire(me)(...args);
+  };
+
   beforeEach(() => {
     versionsTableName = `versions-table-name-${uuid()}`.replace(/-/g, '_');
-  });
 
-  const initialize = () => {
-    describeDatabase = tquire(me);
-
+    context = {};
     config = _.cloneDeep(testConfig);
 
-    context = { config };
-
-    set(context, POOL, mockQuery);
+    set(context, 'config', config);
     set(context, VERSIONS_TABLE_NAME, versionsTableName);
-  };
+  });
 
   describe('given that the versions table does not exist', () => {
     beforeEach(() => {
       mockQuery = generateMockQuery().bindQueryAndResponse(
-        `SELECT MAX(version) FROM ${versionsTableName};`,
+        getVersion(context),
         () =>
           Promise.reject(
             new Error(`relation "${versionsTableName}" does not exist`),
           ),
       );
-
-      initialize();
     });
 
     it('should indicate the table does not exist', () =>
