@@ -1,3 +1,5 @@
-const defaultConfig = require('config');
+const defaultConfig = require('../lib/defaults');
+const merge = require('lodash.merge');
 
-module.exports = options => Object.assign({}, defaultConfig, options);
+module.exports = options =>
+  merge({ Promise }, defaultConfig, { config: options });

@@ -16,6 +16,7 @@
   "dependencies": {
     "@0ti.me/tiny-pfp": "^0.1.12",
     "config": "^3.3.1",
+    "lodash.merge": "^4.6.2",
     "pg": "^8.3.2",
     "pg-format": "^1.0.4"
   },

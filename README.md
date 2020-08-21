@@ -32,7 +32,7 @@ Relational databases must be versioned if their data and tables are to be migrat
       "scratch": [
         "CREATE TABLE table_name"
       ],
-      "tableNameForVersions": "versions",
+      "tableNameForVersions": "DatabaseVersion",
       "version": 1
     }
 
