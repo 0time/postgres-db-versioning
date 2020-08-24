@@ -22,14 +22,19 @@ module.exports = function() {
       if (acc) return acc;
 
       if (isString(each.query)) {
+        // If the expected query is a string, expect an exact match for the actual query string,
+        // and return the matching response if the strings match exactly.
         if (query === each.query) {
           return each.response;
         }
-      } else if (each.query.test) {
+      } else if (_.isRegExp(each.query)) {
+        // If the expected query is a regular expression, use it to test the actual query string,
+        // and return the matching response if a match is found on the query string.
         if (each.query.test(query)) {
           return each.response;
         }
       } else {
+        // If the expected query is anything else, throw an error.
         throw new Error('invalid query expectation');
       }
 
