@@ -1,0 +1,5 @@
+/.nyc_output/
+/config/local*
+/coverage/
+/node_modules/
+*.log
