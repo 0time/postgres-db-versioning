@@ -14,7 +14,7 @@
     "test:unit": "NODE_ENV=unit nyc mocha"
   },
   "dependencies": {
-    "@0ti.me/tiny-pfp": "^0.1.12",
+    "@0ti.me/tiny-pfp": "0.1.13",
     "config": "^3.3.1",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
