@@ -1,26 +1,30 @@
 const createVersionsTable = require('../../src/lib/queries/create-versions-table');
 const generateMockQuery = require('../lib/generate-mock-query');
 const getVersion = require('../../src/lib/queries/get-version');
-const initializeMockLogger = require('../lib/initialize-mock-logger');
 const insertVersionsTable = require('../../src/lib/queries/insert-versions-table');
 const {
   JSON_SELECTORS: {
     BEGIN,
     COMMIT,
-    CONFIG_LOGGER,
+    CONFIG_EVENT_HANDLER,
     CONFIG_POOL,
     DRY_RUN,
-    ERROR_FN_LOGGER_CONFIG,
-    INFO_FN_LOGGER_CONFIG,
     MIGRATIONS,
     ROLLBACK,
     VERSIONS_TABLE_NAME,
   },
 } = require('../../src/lib/constants');
-const { get, set } = require('@0ti.me/tiny-pfp');
+const { set } = require('@0ti.me/tiny-pfp');
 const testConfig = require('config');
 
-const { _, d, expect, tquire, uuid } = deps;
+const {
+  _,
+  d,
+  expect,
+  sinon: { stub },
+  tquire,
+  uuid,
+} = deps;
 
 const me = __filename;
 
@@ -35,7 +39,6 @@ d(me, () => {
   let getVersionQuery = null;
   let insertStatement = null;
   let migrations = null;
-  let mockLogger = null;
   let mockQuery = null;
   let versionsTableName = null;
 
@@ -53,8 +56,6 @@ d(me, () => {
     );
 
   const index = () => {
-    initializeMockLogger(context);
-
     A = m(0);
     B = m(1);
     C = m(2);
@@ -65,8 +66,6 @@ d(me, () => {
 
     set(context, CONFIG_POOL, mockQuery);
     set(context, MIGRATIONS, migrations);
-
-    mockLogger = get(context, CONFIG_LOGGER);
 
     insertStatement = insertVersionsTable(context)({}).shift();
 
@@ -112,26 +111,23 @@ d(me, () => {
     });
 
     describe('and dry run is set', () => {
+      let eventHandler = null;
+
       beforeEach(() => {
+        eventHandler = stub();
+
         set(context, DRY_RUN, true);
+        set(context, CONFIG_EVENT_HANDLER, eventHandler);
       });
 
       it('should dry run', () =>
-        expect(index(context)).to.eventually.be.fulfilled.then(() => {
-          expect(
-            mockLogger[get(context, ERROR_FN_LOGGER_CONFIG)].args,
-            'error-fn-calls',
-          ).to.deep.equal([]);
-
-          expect(
-            mockLogger[get(context, INFO_FN_LOGGER_CONFIG)].args,
-            'info-fn-calls',
-          ).to.deep.equal(
+        expect(index(context)).to.eventually.be.fulfilled.then(() =>
+          expect(eventHandler.args).to.deep.equal(
             [[BEGIN], [createVersionsTableStatement]]
               .concat(fromArray([A, B, C, D, E]))
               .concat([[COMMIT]]),
-          );
-        }));
+          ),
+        ));
     });
 
     describe('and dry run is not set', () => {

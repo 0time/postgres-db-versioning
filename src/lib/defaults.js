@@ -7,11 +7,6 @@ module.exports = {
       database: 'postgres',
     },
     dryRun: false,
-    loggerFunctionMap: {
-      error: 'error',
-      info: 'info',
-    },
-    logger: console,
     migrations: [],
     tableNameForVersions: 'DatabaseVersion',
   },
