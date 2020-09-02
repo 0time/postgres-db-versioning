@@ -13,14 +13,7 @@ Relational databases must be versioned if their data and tables are to be migrat
         "port": 54231
       },
       "dryRun": false
-      "loggerFunctionMap": {
-        "error": "fatal",
-        "info": "notice"
-      },
-      "logger": {
-        fatal: text => console.error(text),
-        notice: text => console.info(text)
-      },
+      "eventHandler": (...eventArgs) => console.error(event),
       "migrations": [
         {"version": 1, "description": "create the table a_table", "sql": "CREATE TABLE a_table (id INT);"},
         {"version": 2, "description": "add the table another_table", "sql": "CREATE TABLE another_table (id INT);"}
@@ -42,17 +35,19 @@ If this module should manage the connection, then pass in a config object with t
 
 ### Dry Run
 
-With this feature enabled, the steps which would be performed will be sent to the logger without producing any effect to the DB.
+With this feature enabled, the steps which would be performed will be sent as events to the event handler.
 
-### Logger Function Map
+### Event Handler
 
-If your logger doesn't implement `"error"` or `"info"`, then you can remap them with this. This utility will only use `"error"` and `"info"` unless you configure it with this feature.
+If this is set, it will emit events (either a string for the query or an array crafted from the (...args) which will be applied to the query function call.
 
-### Logger
+For example, if the eventHandler is called with multiple arguments, such as: 'SELECT * FROM x WHERE x.y = ?;' and ['fred'], then when the plan executes, it would execute something like this:
 
-The logger should implement functions for `"error"` and `"info"` unless you remapped them with `"options"."loggerFunctionMap"`, in which case those remapped functions should be implemented.
+    pool.query('SELECT * FROM x WHERE x.y = ?;', ['fred']);
 
-If not provided, it will default to `"globals"."console"`.
+If the eventHandler is called with just a string, like 'SELECT * FROM x;', it would execute something like this:
+
+    pool.query('SELECT * FROM x');
 
 ### Migrations
 

@@ -1,17 +1,19 @@
 const { get } = require('@0ti.me/tiny-pfp');
 const {
-  JSON_SELECTORS: { DRY_RUN, IS_QUERY, LOGGER, PLAN },
+  JSON_SELECTORS: { EVENT_HANDLER, IS_QUERY, PLAN },
 } = require('../lib/constants');
 
 module.exports = context => {
-  if (get(context, DRY_RUN, false) === true) {
+  const eventHandler = get(context, EVENT_HANDLER, false);
+
+  if (eventHandler !== false) {
     get(context, PLAN).forEach(each => {
       if (get(each, IS_QUERY, true) === true) {
         // non queries should be ignored during the plan, they just set(context, TRANSACTION, true|false);
         if (Array.isArray(each)) {
-          get(context, LOGGER).info(...each);
+          eventHandler.emit(...each);
         } else {
-          get(context, LOGGER).info(each);
+          eventHandler.emit(each);
         }
       }
     });
